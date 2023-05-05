@@ -20,7 +20,6 @@ int	is_in_argset(const char c)
 	int		i;
 
 	argset = "cspdiuxX";
-
 	i = 0;
 	while (argset[i])
 	{
@@ -64,9 +63,9 @@ void	dispatch(const char format, va_list *ap, int *n_bytes)
 	if (format == 'u')
 		print_nbr_base_u(va_arg(*ap, unsigned int), 10, "0123456789", n_bytes);
 	if (format == 'x')
-		print_nbr_base_ulong(va_arg(*ap, unsigned int), 16, "0123456789abcdef", n_bytes);
+		print_ulong(va_arg(*ap, unsigned int), 16, "0123456789abcdef", n_bytes);
 	if (format == 'X')
-		print_nbr_base_ulong(va_arg(*ap, unsigned int), 16, "0123456789ABCDEF", n_bytes);
+		print_ulong(va_arg(*ap, unsigned int), 16, "0123456789ABCDEF", n_bytes);
 }
 
 int	ft_printf(const char *s, ...)
@@ -74,8 +73,6 @@ int	ft_printf(const char *s, ...)
 	va_list	ap;
 	int		i;
 	int		n_bytes;
-//	int		var;
-//	int		bytes;
 
 	n_bytes = 0;
 	va_start(ap, s);
@@ -112,6 +109,9 @@ int	main()
 	printf("%d\n", printf("%X\n", INT_MAX));
 	ft_printf("%d\n", ft_printf("%x\n", -42));
 	printf("%d\n", printf("%x\n", -42));
+	ft_printf("===================");
+	ft_printf("%d\n", ft_printf("NULL %s NULL ", NULL));
+	printf("%d\n", printf("NULL %s NULL ", NULL));
 	return (0);
 }
 */

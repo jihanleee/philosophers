@@ -11,50 +11,17 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include "../ft_printf.h"
-void	ft_putchar_count(char c, int *n_bytes)
-{
-	write(1, &c, 1);
-	(*n_bytes)++;
-}
+#include "ft_printf.h"
 
-void	ft_putstr_count(char *str, int *n_bytes)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		ft_putchar_count(str[i], n_bytes);
-		i++;
-	}
-}
-void	print_p(void *addr, int *n_bytes)
-{
-	char			*hex;
-	unsigned long	long_addr;
-
-	hex = "0123456789abcdef";
-	if (addr == 0)
-	{
-		ft_putstr_count("(nil)", n_bytes);
-		return ;
-	}
-	long_addr = (unsigned long)addr;
-	ft_putstr_count("0x", n_bytes);
-	print_nbr_base_ulong(long_addr, 16, hex, n_bytes);
-}
-
-void	print_nbr_base_ulong(unsigned long nbr, int radix, char *base, int *n_bytes)
+void	print_ulong(unsigned long nbr, int radix, char *base, int *n_bytes)
 {
 	if (nbr >= (unsigned long)radix)
-		print_nbr_base_ulong(nbr / radix, radix, base, n_bytes);
+		print_ulong(nbr / radix, radix, base, n_bytes);
 	ft_putchar_count(base[nbr % radix], n_bytes);
 }
 
 void	print_nbr_base_u(unsigned int nbr, int radix, char *base, int *n_bytes)
 {
-
 	if (nbr >= (unsigned int)radix)
 		print_nbr_base(nbr / radix, radix, base, n_bytes);
 	ft_putchar_count(base[nbr % radix], n_bytes);
