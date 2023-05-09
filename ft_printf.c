@@ -6,12 +6,11 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:52:47 by jihalee           #+#    #+#             */
-/*   Updated: 2023/05/09 14:28:32 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/05/09 15:42:31 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
-#include <stdio.h>
 #include "ft_printf.h"
 
 int	is_in_argset(const char c)
