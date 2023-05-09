@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:52:47 by jihalee           #+#    #+#             */
-/*   Updated: 2023/05/04 18:38:28 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/05/09 14:28:32 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,27 @@ int	count_args(const char *s)
 
 void	dispatch(const char format, va_list *ap, int *n_bytes)
 {
+	char	*decimal;
+	char	*hex_l;
+	char	*hex_u;
+
+	decimal = "0123456789";
+	hex_l = "0123456789abcdef";
+	hex_u = "0123456789ABCDEF";
 	if (format == 'c')
 		ft_putchar_count(va_arg(*ap, int), n_bytes);
 	if (format == 'd' || format == 'i')
-		ft_putnbr_base_count(va_arg(*ap, int), "0123456789", n_bytes);
+		ft_putnbr_base_count(va_arg(*ap, int), decimal, n_bytes);
 	if (format == 's')
 		ft_putstr_count(va_arg(*ap, char *), n_bytes);
 	if (format == 'p')
 		print_p(va_arg(*ap, void *), n_bytes);
 	if (format == 'u')
-		print_nbr_base_u(va_arg(*ap, unsigned int), 10, "0123456789", n_bytes);
+		print_nbr_base_u(va_arg(*ap, unsigned int), 10, decimal, n_bytes);
 	if (format == 'x')
-		print_ulong(va_arg(*ap, unsigned int), 16, "0123456789abcdef", n_bytes);
+		print_nbr_base_u(va_arg(*ap, unsigned int), 16, hex_l, n_bytes);
 	if (format == 'X')
-		print_ulong(va_arg(*ap, unsigned int), 16, "0123456789ABCDEF", n_bytes);
+		print_nbr_base_u(va_arg(*ap, unsigned int), 16, hex_u, n_bytes);
 }
 
 int	ft_printf(const char *s, ...)
