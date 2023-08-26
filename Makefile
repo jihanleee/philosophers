@@ -6,35 +6,39 @@
 #    By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 02:52:38 by jihalee           #+#    #+#              #
-#    Updated: 2023/05/05 17:13:34 by jihalee          ###   ########.fr        #
+#    Updated: 2023/08/26 13:42:20 by jihalee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libftprintf.a
+NAME = philo
 
-SRCS = ft_printf.c print_formats1.c print_formats2.c
+SRC_DIR = ./srcs/
 
-OBJS = ${SRCS:.c=.o}
+INCLUDE = -I ./include/
 
-CC = gcc
+SRCS = main.c
 
-CFLAGS = -Wextra -Werror -Wall
+SRC_FILES = $(addprefix $(SRC_DIR), $(SRCS))
 
-INCLUDE = ./
+OBJ_FILES = $(SRC_FILES:.c=.o)
 
-all : ${NAME}
+CC = cc
 
-.c.o :
-	${CC} ${CFLAGS} -c $< -o $@
+CFLAGS = -g -Wextra -Werror -Wall
 
-$(NAME) : ${OBJS}
-	ar -rcs ${NAME} ${OBJS}
+all : $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+$(NAME) : $(OBJ_FILES)
+	$(CC) -o $(NAME) $(OBJ_FILES) $(INCLUDE) -pthread
 
 clean :
-	rm -f *.o
+	rm -f *.o */*.o 
 
 fclean : clean
-	rm -f ${NAME}
+	rm -f $(NAME) $(LIBFT)
 
 re : fclean all
 
