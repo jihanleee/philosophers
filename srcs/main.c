@@ -38,43 +38,48 @@ void	print_state_change(t_table *table, t_philo *philo)
 
 void *start_routine(void *philo)
 {
+	int	right;
+	int	left;
+
+	left = ((t_philo *)philo)->index;
+	right = ((t_philo *)philo)->index + 1;
+	if (((t_philo *)philo)->index == ((t_philo *)philo)->table->n_philos - 1)
+	{
+		right = ((t_philo *)philo)->table->n_philos - 1;
+		left = 0;
+	}
 	while (!((t_philo *)philo)->table->stop_now)
 	{
-		think((t_philo *)philo);
-		eat_yumyum((t_philo *)philo);
+		think((t_philo *)philo, left, right);
+		eat_yumyum((t_philo *)philo, left, right);
 		sweet_dreams((t_philo *)philo);
 	}
 	return (0);
 }
 
-void	eat_yumyum(t_philo *philo)
+void	eat_yumyum(t_philo *philo, int left, int right)
 {
 	long	end_time;
 	int		index;
 	int		n;
 
 	index = philo->index;
-	if (philo->table->both_available[index])
-	{
-		n = philo->table->n_philos;
-		pthread_mutex_lock(&philo->table->forks[(index + n - 1) % n]);
-		pthread_mutex_lock(&philo->table->forks[index]);
-		philo->right_fork = 1;
-		philo->left_fork = 1;
-		philo->table->both_available[index] = 0;
-		end_time = philo->table->crnt_time + philo->table->amnt_time_eat;
-		philo->state = eating;
-		philo->state_change = 1;
-		philo->time_to_die = philo->table->crnt_time + philo->table->amnt_time_die;
-		while (!philo->table->stop_now \
-			&& philo->table->crnt_time < end_time)
-			usleep(10);
-		pthread_mutex_unlock(&philo->table->forks[(index + n - 1) % n]);
-		pthread_mutex_unlock(&philo->table->forks[index]);
-	}
+	n = philo->table->n_philos;
+	philo->right_fork = 1;
+	philo->left_fork = 1;
+	philo->table->both_available[index] = 0;
+	end_time = philo->table->crnt_time + philo->table->amnt_time_eat;
+	philo->state = eating;
+	philo->state_change = 1;
+	philo->time_to_die = philo->table->crnt_time + philo->table->amnt_time_die;
+	while (!philo->table->stop_now \
+		&& philo->table->crnt_time < end_time)
+		usleep(1000);
+	pthread_mutex_unlock(&philo->table->forks[left]);
+	pthread_mutex_unlock(&philo->table->forks[right]);
 }
 
-void	think(t_philo *philo)
+void	think(t_philo *philo, int left, int right)
 {
 	int		n;
 	int		index;
@@ -87,17 +92,8 @@ void	think(t_philo *philo)
 	forks = philo->table->forks;
 	philo->state = thinking;
 	philo->state_change = 1;
-	while (!philo->table->stop_now)
-	{
-		if (n != 1 && forks[(index + n - 1) % n].__data.__lock == 0 \
-			&& forks[index].__data.__lock == 0)
-		{
-			both_available[index] = 1;
-			break ;
-		}
-		if (philo->time_to_die - philo->table->crnt_time > philo->table->amnt_time_eat + 100)
-			usleep(1000);
-	}
+	pthread_mutex_lock(&philo->table->forks[left]);
+	pthread_mutex_lock(&philo->table->forks[right]);
 }
 
 void	sweet_dreams(t_philo *philo)
@@ -109,7 +105,7 @@ void	sweet_dreams(t_philo *philo)
 	end_time = philo->table->crnt_time + philo->table->amnt_time_sleep;
 	while (!philo->table->stop_now \
 			&& philo->table->crnt_time < end_time)
-		usleep(100);
+		usleep(1000);
 }
 
 void	check_status(t_philo *philos, t_table *table)
@@ -137,7 +133,7 @@ void	check_status(t_philo *philos, t_table *table)
 		}
 		if (all_ate_well)
 			table->stop_now = 1;
-		usleep(100);
+		usleep(1000);
 	}
 }
 

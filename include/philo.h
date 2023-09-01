@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/08/29 00:53:22 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/01 20:29:14 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ typedef struct s_philo
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atol(const char *nptr);
 void	sweet_dreams(t_philo *philo);
-void	think(t_philo *philo);
-void	eat_yumyum(t_philo *philo);
+void	think(t_philo *philo, int left, int right);
+void	eat_yumyum(t_philo *philo, int left, int right);
 #endif
