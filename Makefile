@@ -6,7 +6,7 @@
 #    By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 02:52:38 by jihalee           #+#    #+#              #
-#    Updated: 2023/09/01 20:51:00 by jihalee          ###   ########.fr        #
+#    Updated: 2023/09/06 20:43:22 by jihalee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = ./srcs/
 
 INCLUDE = -I ./include/
 
-SRCS = ft_calloc.c ft_atol.c main.c
+SRCS = ft_calloc.c ft_atol.c main.c mutex.c
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRCS))
 

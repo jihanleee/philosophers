@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/01 20:29:14 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/06 19:55:27 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,15 @@
 # include <sys/time.h>
 # include <stdbool.h>
 
-/*
-typedef struct s_
-{
-
-}				t_
-*/
-
 typedef pthread_mutex_t	t_mutex;
-typedef pthread_t	t_thread;
-typedef suseconds_t	t_useconds;
-typedef struct timeval t_tv;
+typedef pthread_t		t_thread;
+typedef suseconds_t		t_useconds;
+typedef struct timeval	t_tv;
 
 typedef enum e_state
 {
 	thinking,
 	sleeping,
-	holding_forks,
 	eating
 }			t_state;
 
@@ -46,31 +38,50 @@ typedef struct s_table
 	bool		*both_available;
 	t_tv		init_tv;
 	bool		stop_now;
+	t_mutex		m_stop_now;
 	int			n_philos;
 	long		amnt_time_die;
 	long		amnt_time_eat;
 	long		amnt_time_sleep;
 	int			num_must_eat;
 	long		crnt_time;
+	t_mutex		m_crnt_time;
 }				t_table;
 
 typedef struct s_philo
 {
 	t_table		*table;
 	int			state;
+	t_mutex		m_state;
 	int			index;
 	t_thread	id;
 	long		time_to_die;
-	bool		left_fork;
-	bool		right_fork;
+	t_mutex		m_time_to_die;
+	bool		holding_forks;
+	t_mutex		m_holding_forks;
 	bool		is_dead;
 	bool		state_change;
+	t_mutex		m_state_change;
 	int			eat_count;
 }				t_philo;
 
+int		write_holding_forks(t_philo *philo, int to_assign);
+int		read_holding_forks(t_philo *philo);
+long	write_time_to_die(t_philo *philo, long to_assign);
+long	read_time_to_die(t_philo *philo);
+long	write_crnt_time(t_table *table, long to_assign);
+long	read_crnt_time(t_table *table);
+int		write_state(t_philo *philo, int to_assign);
+int		read_state(t_philo *philo);
+int		write_state_change(t_philo *philo, int to_assign);
+int		read_state_change(t_philo *philo);
+int		read_stop_now(t_table *table);
+int		write_stop_now(t_table *table, int value_to_assign);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atol(const char *nptr);
 void	sweet_dreams(t_philo *philo);
 void	think(t_philo *philo, int left, int right);
 void	eat_yumyum(t_philo *philo, int left, int right);
+void	check_all_ate_well(t_table *table, t_philo *philos);
+
 #endif
