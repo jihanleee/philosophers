@@ -65,23 +65,23 @@ void	*start_routine(void *philo)
 
 void	eat_yumyum(t_philo *philo, int left, int right)
 {
-	long	end_time;
 	long	time_to_die;
 
-	end_time = read_crnt_time(philo->table) + philo->table->amnt_time_eat;
+	if (read_stop_now(philo->table))
+		return ;
 	write_state(philo, eating);
 	write_state_change(philo, 1);
 	time_to_die = read_crnt_time(philo->table) + philo->table->amnt_time_die;
 	write_time_to_die(philo, time_to_die);
-	while (!read_stop_now(philo->table) \
-		&& read_crnt_time(philo->table) < end_time)
-		usleep(100);
+	usleep(philo->table->amnt_time_eat * 1000);
 	pthread_mutex_unlock(&philo->table->forks[left]);
 	pthread_mutex_unlock(&philo->table->forks[right]);
 }
 
 void	think(t_philo *philo, int left, int right)
 {
+	if (read_stop_now(philo->table))
+		return ;
 	write_state(philo, thinking);
 	write_state_change(philo, 1);
 	pthread_mutex_lock(&philo->table->forks[left]);
@@ -91,14 +91,11 @@ void	think(t_philo *philo, int left, int right)
 
 void	sweet_dreams(t_philo *philo)
 {
-	long	end_time;
-
+	if (read_stop_now(philo->table))
+		return ;
 	write_state(philo, sleeping);
 	write_state_change(philo, 1);
-	end_time = read_crnt_time(philo->table) + philo->table->amnt_time_sleep;
-	while (!read_stop_now(philo->table) \
-			&& read_crnt_time(philo->table) < end_time)
-		usleep(100);
+	usleep(philo->table->amnt_time_eat * 1000);
 }
 
 void	check_all_ate_well(t_table *table, t_philo *philos)
@@ -140,7 +137,7 @@ void	check_status(t_philo *philos, t_table *table)
 				print_state_change(table, &philos[i], philos);
 			i++;
 		}
-		usleep(100);
+		usleep(10);
 	}
 }
 
