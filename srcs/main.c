@@ -8,28 +8,27 @@ long	get_elapsed_time(t_table *table)
 	gettimeofday(&crnt_time, NULL);
 	ms = (crnt_time.tv_sec - table->init_tv.tv_sec) * 1000;
 	ms += (crnt_time.tv_usec - table->init_tv.tv_usec) / 1000;
-	write_crnt_time(table, ms);
 	return (ms);
 }
 
-void	print_state_change(t_table *table, t_philo *philo, t_philo *philos)
+void	print_state_change(t_table *table, t_philo *philo, t_philo *philos, long crnt_time)
 {
 	check_all_ate_well(table, philos);
 	if (read_holding_forks(philo))
 	{
 		printf("%ld %d has taken a fork\n", \
-		read_crnt_time(table), philo->index);
+		crnt_time, philo->index);
 		printf("%ld %d has taken a fork\n", \
-		read_crnt_time(table), philo->index);
+		crnt_time, philo->index);
 		write_holding_forks(philo, 0);
 	}
 	if (read_state(philo) == sleeping && !read_stop_now(table))
-		printf("%ld %d is sleeping\n", read_crnt_time(table), philo->index);
+		printf("%ld %d is sleeping\n", crnt_time, philo->index);
 	else if (read_state(philo) == thinking && !read_stop_now(table))
-		printf("%ld %d is thinking\n", read_crnt_time(table), philo->index);
+		printf("%ld %d is thinking\n", crnt_time, philo->index);
 	else if (read_state(philo) == eating && !read_stop_now(table))
 	{
-		printf("%ld %d is eating\n", read_crnt_time(table), philo->index);
+		printf("%ld %d is eating\n", crnt_time, philo->index);
 		(philo->eat_count)++;
 	}
 	philo->state_change = 0;
@@ -67,8 +66,6 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 {
 	long	time_to_die;
 
-	if (read_stop_now(philo->table))
-		return ;
 	write_state(philo, eating);
 	write_state_change(philo, 1);
 	time_to_die = read_crnt_time(philo->table) + philo->table->amnt_time_die;
@@ -80,8 +77,6 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 
 void	think(t_philo *philo, int left, int right)
 {
-	if (read_stop_now(philo->table))
-		return ;
 	write_state(philo, thinking);
 	write_state_change(philo, 1);
 	pthread_mutex_lock(&philo->table->forks[left]);
@@ -91,8 +86,6 @@ void	think(t_philo *philo, int left, int right)
 
 void	sweet_dreams(t_philo *philo)
 {
-	if (read_stop_now(philo->table))
-		return ;
 	write_state(philo, sleeping);
 	write_state_change(philo, 1);
 	usleep(philo->table->amnt_time_eat * 1000);
@@ -119,25 +112,26 @@ void	check_all_ate_well(t_table *table, t_philo *philos)
 void	check_status(t_philo *philos, t_table *table)
 {
 	int		i;
+	long	crnt_time;
 
 	while (!read_stop_now(table))
 	{
-		get_elapsed_time(table);
+		crnt_time = get_elapsed_time(table);
 		i = 0;
 		while (i < table->n_philos)
 		{
-			if (read_crnt_time(table) > read_time_to_die(&philos[i]))
+			if (crnt_time > read_time_to_die(&philos[i]))
 			{
 				write_stop_now(table, 1);
-				printf("%ld %d died\n", table->crnt_time, i);
+				printf("%ld %d died\n", crnt_time, i);
 				break ;
 			}
 			else if (read_state_change(&philos[i]) \
 					|| read_holding_forks(&philos[i]))
-				print_state_change(table, &philos[i], philos);
+				print_state_change(table, &philos[i], philos, crnt_time);
 			i++;
 		}
-		usleep(10);
+		usleep(100);
 	}
 }
 
