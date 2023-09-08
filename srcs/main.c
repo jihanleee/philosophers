@@ -13,25 +13,22 @@ long	get_elapsed_time(t_table *table)
 
 void	print_state_change(t_table *table, t_philo *philo, t_philo *philos, long crnt_time)
 {
+	int	state;
+	int	stop_now;
+
+	state = read_state(philo);
 	check_all_ate_well(table, philos);
-	if (read_holding_forks(philo))
-	{
-		printf("%ld %d has taken a fork\n", \
-		crnt_time, philo->index);
-		printf("%ld %d has taken a fork\n", \
-		crnt_time, philo->index);
-		write_holding_forks(philo, 0);
-	}
-	if (read_state(philo) == sleeping && !read_stop_now(table))
+	stop_now = read_stop_now(philo->table);
+	if (state == sleeping && !stop_now)
 		printf("%ld %d is sleeping\n", crnt_time, philo->index);
-	else if (read_state(philo) == thinking && !read_stop_now(table))
+	else if (state == thinking && !stop_now)
 		printf("%ld %d is thinking\n", crnt_time, philo->index);
-	else if (read_state(philo) == eating && !read_stop_now(table))
+	else if (state == eating && !stop_now)
 	{
 		printf("%ld %d is eating\n", crnt_time, philo->index);
 		(philo->eat_count)++;
 	}
-	philo->state_change = 0;
+	write_state_change(philo, 0);
 }
 
 void	*start_routine(void *philo)
@@ -66,28 +63,35 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 {
 	long	time_to_die;
 
+
 	write_state(philo, eating);
 	write_state_change(philo, 1);
-	time_to_die = read_crnt_time(philo->table) + philo->table->amnt_time_die;
+	usleep(100);
+	time_to_die = get_elapsed_time(philo->table) + philo->table->amnt_time_die;
 	write_time_to_die(philo, time_to_die);
 	usleep(philo->table->amnt_time_eat * 1000);
 	pthread_mutex_unlock(&philo->table->forks[left]);
+	printf("%ld %d has put down lfork\n", get_elapsed_time(philo->table), philo->index);
 	pthread_mutex_unlock(&philo->table->forks[right]);
+	printf("%ld %d has put down rfork\n", get_elapsed_time(philo->table), philo->index);
 }
 
 void	think(t_philo *philo, int left, int right)
 {
 	write_state(philo, thinking);
 	write_state_change(philo, 1);
+	usleep(100);//why does this prevent death?
 	pthread_mutex_lock(&philo->table->forks[left]);
+	printf("%ld %d has taken lfork\n", get_elapsed_time(philo->table), philo->index);
 	pthread_mutex_lock(&philo->table->forks[right]);
-	write_holding_forks(philo, 1);
+	printf("%ld %d has taken rfork\n", get_elapsed_time(philo->table), philo->index);
 }
 
 void	sweet_dreams(t_philo *philo)
 {
 	write_state(philo, sleeping);
 	write_state_change(philo, 1);
+	usleep(100);
 	usleep(philo->table->amnt_time_eat * 1000);
 }
 
@@ -116,18 +120,17 @@ void	check_status(t_philo *philos, t_table *table)
 
 	while (!read_stop_now(table))
 	{
-		crnt_time = get_elapsed_time(table);
 		i = 0;
 		while (i < table->n_philos)
 		{
+			crnt_time = get_elapsed_time(table);
 			if (crnt_time > read_time_to_die(&philos[i]))
 			{
 				write_stop_now(table, 1);
 				printf("%ld %d died\n", crnt_time, i);
 				break ;
 			}
-			else if (read_state_change(&philos[i]) \
-					|| read_holding_forks(&philos[i]))
+			else if (read_state_change(&philos[i]))
 				print_state_change(table, &philos[i], philos, crnt_time);
 			i++;
 		}
@@ -178,6 +181,7 @@ void	init_vars(t_table *table, t_philo **philos, char argc, char **argv)
 	while (i < table->n_philos)
 	{
 		pthread_mutex_init(&(table->forks[i]), NULL);
+		pthread_mutex_init(&((*philos)[i].m_state), NULL);
 		(*philos)[i].time_to_die = table->amnt_time_die;
 		(*philos)[i].index = i;
 		(*philos)[i].table = table;

@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 22:35:27 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/06 19:57:44 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/07 20:34:12 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,24 +81,6 @@ int	write_state(t_philo *philo, int to_assign)
 	pthread_mutex_lock(&philo->m_state);
 		philo->state = to_assign;
 	pthread_mutex_unlock(&philo->m_state);
-	return (to_assign);
-}
-
-long	read_crnt_time(t_table *table)
-{
-	long	val_read;
-
-	pthread_mutex_lock(&table->m_crnt_time);
-		val_read = table->crnt_time;
-	pthread_mutex_unlock(&table->m_crnt_time);
-	return (val_read);
-}
-
-long	write_crnt_time(t_table *table, long to_assign)
-{
-	pthread_mutex_lock(&table->m_crnt_time);
-		table->crnt_time = to_assign;
-	pthread_mutex_unlock(&table->m_crnt_time);
 	return (to_assign);
 }
 

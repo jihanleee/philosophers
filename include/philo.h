@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/06 19:55:27 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/08 18:21:52 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef enum e_state
 typedef struct s_table
 {
 	t_mutex		*forks;
-	bool		*both_available;
 	t_tv		init_tv;
 	bool		stop_now;
 	t_mutex		m_stop_now;
