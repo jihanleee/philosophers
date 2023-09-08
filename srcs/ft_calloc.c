@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/08 23:36:25 by jihalee           #+#    #+#             */
+/*   Updated: 2023/09/08 23:36:36 by jihalee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
 
 void	ft_bzero(void *s, size_t n)
@@ -11,6 +23,7 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
+
 void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*result;

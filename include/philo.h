@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/08 18:21:52 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/08 23:53:35 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,20 @@ typedef struct s_philo
 	t_thread	id;
 	long		time_to_die;
 	t_mutex		m_time_to_die;
-	bool		holding_forks;
-	t_mutex		m_holding_forks;
+	bool		lfork;
+	t_mutex		m_lfork;
+	bool		rfork;
+	t_mutex		m_rfork;
 	bool		is_dead;
 	bool		state_change;
 	t_mutex		m_state_change;
 	int			eat_count;
 }				t_philo;
 
-int		write_holding_forks(t_philo *philo, int to_assign);
-int		read_holding_forks(t_philo *philo);
+int		write_lfork(t_philo *philo, int to_assign);
+int		read_lfork(t_philo *philo);
+int		write_rfork(t_philo *philo, int to_assign);
+int		read_rfork(t_philo *philo);
 long	write_time_to_die(t_philo *philo, long to_assign);
 long	read_time_to_die(t_philo *philo);
 long	write_crnt_time(t_table *table, long to_assign);
@@ -82,5 +86,10 @@ void	sweet_dreams(t_philo *philo);
 void	think(t_philo *philo, int left, int right);
 void	eat_yumyum(t_philo *philo, int left, int right);
 void	check_all_ate_well(t_table *table, t_philo *philos);
+bool	are_args_valid(char **argv);
+void	init_vars(t_table *table, t_philo **philos, char argc, char **argv);
+long	get_elapsed_time(t_table *table);
+void	create_threads(t_philo *philos, t_table *table);
+void	check_status(t_philo *philos, t_table *table);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 02:52:38 by jihalee           #+#    #+#              #
-#    Updated: 2023/09/08 18:47:27 by jihalee          ###   ########.fr        #
+#    Updated: 2023/09/08 23:54:30 by jihalee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC_DIR = ./srcs/
 
 INCLUDE = -I ./include/
 
-SRCS = ft_calloc.c ft_atol.c main.c mutex.c
+SRCS = ft_calloc.c ft_atol.c main.c mutex1.c mutex2.c mutex3.c check_thread_status.c utils.c routine.c
 
 SRC_FILES = $(addprefix $(SRC_DIR), $(SRCS))
 
