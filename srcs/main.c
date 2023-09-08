@@ -11,13 +11,12 @@ long	get_elapsed_time(t_table *table)
 	return (ms);
 }
 
-void	print_state_change(t_table *table, t_philo *philo, t_philo *philos, long crnt_time)
+void	print_state_change(t_philo *philo, long crnt_time)
 {
 	int	state;
 	int	stop_now;
 
 	state = read_state(philo);
-	check_all_ate_well(table, philos);
 	stop_now = read_stop_now(philo->table);
 	if (state == sleeping && !stop_now)
 		printf("%ld %d is sleeping\n", crnt_time, philo->index);
@@ -71,9 +70,7 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 	write_time_to_die(philo, time_to_die);
 	usleep(philo->table->amnt_time_eat * 1000);
 	pthread_mutex_unlock(&philo->table->forks[left]);
-	printf("%ld %d has put down lfork\n", get_elapsed_time(philo->table), philo->index);
 	pthread_mutex_unlock(&philo->table->forks[right]);
-	printf("%ld %d has put down rfork\n", get_elapsed_time(philo->table), philo->index);
 }
 
 void	think(t_philo *philo, int left, int right)
@@ -82,9 +79,11 @@ void	think(t_philo *philo, int left, int right)
 	write_state_change(philo, 1);
 	usleep(100);//why does this prevent death?
 	pthread_mutex_lock(&philo->table->forks[left]);
-	printf("%ld %d has taken lfork\n", get_elapsed_time(philo->table), philo->index);
+	if (!read_stop_now(philo->table))
+		printf("%ld %d has taken a fork\n", get_elapsed_time(philo->table), philo->index);
 	pthread_mutex_lock(&philo->table->forks[right]);
-	printf("%ld %d has taken rfork\n", get_elapsed_time(philo->table), philo->index);
+	if (!read_stop_now(philo->table))
+		printf("%ld %d has taken a fork\n", get_elapsed_time(philo->table), philo->index);
 }
 
 void	sweet_dreams(t_philo *philo)
@@ -123,6 +122,7 @@ void	check_status(t_philo *philos, t_table *table)
 		i = 0;
 		while (i < table->n_philos)
 		{
+			check_all_ate_well(table, philos);
 			crnt_time = get_elapsed_time(table);
 			if (crnt_time > read_time_to_die(&philos[i]))
 			{
@@ -131,7 +131,7 @@ void	check_status(t_philo *philos, t_table *table)
 				break ;
 			}
 			else if (read_state_change(&philos[i]))
-				print_state_change(table, &philos[i], philos, crnt_time);
+				print_state_change(&philos[i], crnt_time);
 			i++;
 		}
 		usleep(100);
