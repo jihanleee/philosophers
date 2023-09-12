@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/09 00:03:52 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/12 06:33:20 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ void	init_philos(t_table *table, t_philo **philos)
 	while (i < table->n_philos)
 	{
 		pthread_mutex_init(&(table->forks[i]), NULL);
-		pthread_mutex_init(&((*philos)[i].m_state), NULL);
-		pthread_mutex_init(&((*philos)[i].m_time_to_die), NULL);
-		pthread_mutex_init(&((*philos)[i].m_lfork), NULL);
-		pthread_mutex_init(&((*philos)[i].m_rfork), NULL);
-		pthread_mutex_init(&((*philos)[i].m_state_change), NULL);
 		(*philos)[i].time_to_die = table->amnt_time_die;
 		(*philos)[i].index = i;
 		(*philos)[i].table = table;
@@ -55,8 +50,7 @@ void	init_vars(t_table *table, t_philo **philos, char argc, char **argv)
 		table->num_must_eat = ft_atol(argv[5]);
 	*philos = (t_philo *)ft_calloc(table->n_philos, sizeof (t_philo));
 	table->forks = (t_mutex *)ft_calloc(table->n_philos, sizeof (t_mutex));
-	pthread_mutex_init(&table->m_stop_now, NULL);
-	pthread_mutex_init(&table->m_crnt_time, NULL);
+	pthread_mutex_init(&table->m_table, NULL);
 	init_philos(table, philos);
 }
 
@@ -78,4 +72,9 @@ bool	are_args_valid(char **argv)
 		i++;
 	}
 	return (1);
+}
+
+void	msleep(long ms)
+{
+	usleep(ms * 1000);
 }

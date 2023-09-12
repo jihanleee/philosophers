@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/08 23:48:54 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/12 06:12:41 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void	check_status(t_philo *philos, t_table *table)
 			}
 			else if (read_state_change(&philos[i]))
 				print_state_change(&philos[i], crnt_time);
+			usleep(100);
 			i++;
 		}
-		usleep(100);
 	}
 }
