@@ -1,14 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   lib_func.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/17 07:39:35 by jihalee           #+#    #+#             */
-/*   Updated: 2023/08/28 02:35:48 by jihalee          ###   ########.fr       */
+/*   Created: 2023/09/08 23:36:25 by jihalee           #+#    #+#             */
+/*   Updated: 2023/09/13 00:45:32 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((unsigned char *)s)[i] = 0;
+		i++;
+	}
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*result;
+	size_t	total;
+
+	total = size * nmemb;
+	if (size != 0 && nmemb != 0 && (total < nmemb || total < size))
+		return (NULL);
+	result = (void *)malloc(total);
+	if (result == 0)
+		return (0);
+	ft_bzero(result, total);
+	return (result);
+}
 
 long	ft_atol(const char *nptr)
 {

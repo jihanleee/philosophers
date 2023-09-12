@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/12 06:33:20 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/13 00:56:25 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	init_philos(t_table *table, t_philo **philos)
 void	init_vars(t_table *table, t_philo **philos, char argc, char **argv)
 {
 	table->stop_now = 0;
+	table->n_ate_well = 0;
 	table->n_philos = ft_atol(argv[1]);
 	table->amnt_time_die = ft_atol(argv[2]);
 	table->amnt_time_eat = ft_atol(argv[3]);
@@ -69,6 +70,8 @@ bool	are_args_valid(char **argv)
 				return (0);
 			j++;
 		}
+		if (j == 0)
+			return (0);
 		i++;
 	}
 	return (1);

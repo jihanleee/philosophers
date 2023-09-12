@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/12 07:09:07 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/09/13 00:42:17 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@ typedef pthread_mutex_t	t_mutex;
 typedef pthread_t		t_thread;
 typedef suseconds_t		t_useconds;
 typedef struct timeval	t_tv;
-
-typedef enum e_state
-{
-	thinking,
-	sleeping,
-	eating
-}			t_state;
 
 typedef struct s_table
 {
@@ -58,22 +51,15 @@ typedef struct s_philo
 	int			eat_count;
 }				t_philo;
 
-int		write_lfork(t_philo *philo, int to_assign);
-int		read_lfork(t_philo *philo);
-int		write_rfork(t_philo *philo, int to_assign);
-int		read_rfork(t_philo *philo);
-long	write_time_to_die(t_philo *philo, long to_assign);
-long	read_time_to_die(t_philo *philo);
-long	write_crnt_time(t_table *table, long to_assign);
-long	read_crnt_time(t_table *table);
-int		write_state(t_philo *philo, int to_assign);
-int		read_state(t_philo *philo);
+int		increament_n_ate_well(t_table *table);
 bool	read_stop_now(t_table *table);
 bool	write_stop_now(t_table *table, int value_to_assign);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atol(const char *nptr);
 void	sweet_dreams(t_philo *philo);
-void	think(t_philo *philo, int left, int right);
+void	think(t_philo *philo);
+void	hold_left_fork(t_philo *philo, int left);
+void	hold_right_fork(t_philo *philo, int right);
 void	eat_yumyum(t_philo *philo, int left, int right);
 void	check_all_ate_well(t_table *table, t_philo *philos);
 bool	are_args_valid(char **argv);
