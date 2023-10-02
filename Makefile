@@ -6,7 +6,7 @@
 #    By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/01 02:52:38 by jihalee           #+#    #+#              #
-#    Updated: 2023/09/13 00:59:25 by jihalee          ###   ########.fr        #
+#    Updated: 2023/10/02 19:16:11 by jihalee          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ all : $(NAME)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(NAME) : $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES) $(INCLUDE) -pthread
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES) $(INCLUDE) -pthread -fsanitize=thread
 
 clean :
 	rm -f *.o */*.o 

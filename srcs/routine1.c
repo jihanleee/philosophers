@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/13 00:43:17 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/02 19:13:57 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	*start_routine(void *philo)
 		left = 0;
 	}
 	if (((t_philo *)philo)->index % 2 == 0)
-		msleep(((t_philo *)philo)->table->amnt_time_eat / 5);
-	while (!read_stop_now(((t_philo *)philo)->table))
+		msleep(((t_philo *)philo)->table->amnt_time_eat / 10);
+	while (!((t_philo *)philo)->table->stop_now)
 	{
-		hold_left_fork((t_philo *)philo, left);
+		hold_left_fork((t_philo *)philo, left, right);
 		hold_right_fork((t_philo *)philo, right);
 		eat_yumyum((t_philo *)philo, left, right);
 		sweet_dreams((t_philo *)philo);
@@ -47,7 +47,6 @@ void	create_threads(t_philo *philos, t_table *table)
 	{
 		get_elapsed_time(table);
 		pthread_create(&philos[i].id, NULL, start_routine, &philos[i]);
-		usleep(10);
 		i++;
 	}
 	i = 0;

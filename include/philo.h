@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/13 00:42:17 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/02 19:02:28 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atol(const char *nptr);
 void	sweet_dreams(t_philo *philo);
 void	think(t_philo *philo);
-void	hold_left_fork(t_philo *philo, int left);
+void	hold_left_fork(t_philo *philo, int left, int right);
 void	hold_right_fork(t_philo *philo, int right);
 void	eat_yumyum(t_philo *philo, int left, int right);
 void	check_all_ate_well(t_table *table, t_philo *philos);

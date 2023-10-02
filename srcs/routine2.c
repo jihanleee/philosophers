@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/13 00:57:06 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/02 19:17:45 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 	while (crnt_time - start_time < philo->table->amnt_time_eat)
 	{
 		crnt_time = get_elapsed_time(philo->table);
-		if (crnt_time > philo->time_to_die && !read_stop_now(philo->table))
+		if (crnt_time > philo->time_to_die && !philo->table->stop_now)
 		{
 			write_stop_now(philo->table, 1);
 			printf("%ld %d died\n", crnt_time, philo->index);
@@ -41,17 +41,15 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 	pthread_mutex_unlock(&philo->table->forks[right]);
 }
 
-void	hold_left_fork(t_philo *philo, int left)
+void	hold_left_fork(t_philo *philo, int left, int right)
 {
 	long	crnt_time;
 
-	if ((philo->time_to_die) > \
-	get_elapsed_time(philo->table) + philo->table->amnt_time_eat / 2)
-		usleep(300);
-	while (philo->table->forks[left].__data.__lock)
+	while (philo->table->forks[left].__data.__lock || \
+		philo->table->forks[right].__data.__lock)
 	{
 		crnt_time = get_elapsed_time(philo->table);
-		if (crnt_time > philo->time_to_die && !read_stop_now(philo->table))
+		if (crnt_time > philo->time_to_die && !philo->table->stop_now)
 		{
 			write_stop_now(philo->table, 1);
 			printf("%ld %d died\n", crnt_time, philo->index);
@@ -60,38 +58,22 @@ void	hold_left_fork(t_philo *philo, int left)
 		usleep(100);
 	}
 	pthread_mutex_lock(&philo->table->forks[left]);
-	if (!read_stop_now(philo->table))
+	if (!philo->table->stop_now)
 		printf("%ld %d has taken a fork\n", \
 		get_elapsed_time(philo->table), philo->index);
 }
 
 void	hold_right_fork(t_philo *philo, int right)
 {
-	long	crnt_time;
-
-	if ((philo->time_to_die) > \
-	get_elapsed_time(philo->table) + philo->table->amnt_time_eat / 2)
-		usleep(300);
-	while (philo->table->forks[right].__data.__lock)
-	{
-		crnt_time = get_elapsed_time(philo->table);
-		if (crnt_time > philo->time_to_die && !read_stop_now(philo->table))
-		{
-			write_stop_now(philo->table, 1);
-			printf("%ld %d died\n", crnt_time, philo->index);
-			break ;
-		}
-		usleep(100);
-	}
 	pthread_mutex_lock(&philo->table->forks[right]);
-	if (!read_stop_now(philo->table))
+	if (!philo->table->stop_now)
 		printf("%ld %d has taken a fork\n", \
 		get_elapsed_time(philo->table), philo->index);
 }
 
 void	think(t_philo *philo)
 {
-	if (!read_stop_now(philo->table))
+	if (!philo->table->stop_now)
 		printf("%ld %d is thinking\n", \
 		get_elapsed_time(philo->table), philo->index);
 }
@@ -103,12 +85,12 @@ void	sweet_dreams(t_philo *philo)
 
 	start_time = get_elapsed_time(philo->table);
 	crnt_time = start_time;
-	if (!read_stop_now(philo->table))
+	if (!philo->table->stop_now)
 		printf("%ld %d is sleeping\n", crnt_time, philo->index);
-	while (crnt_time - start_time < philo->table->amnt_time_sleep)
+	while (crnt_time - start_time <= philo->table->amnt_time_sleep)
 	{
 		crnt_time = get_elapsed_time(philo->table);
-		if (crnt_time > philo->time_to_die && !read_stop_now(philo->table))
+		if (crnt_time > philo->time_to_die && !philo->table->stop_now)
 		{
 			write_stop_now(philo->table, 1);
 			printf("%ld %d died\n", crnt_time, philo->index);
