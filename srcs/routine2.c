@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/10/02 19:17:45 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/21 16:53:26 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	eat_yumyum(t_philo *philo, int left, int right)
 			printf("%ld %d died\n", crnt_time, philo->index);
 			break ;
 		}
-		usleep(100);
+		usleep(50);
 	}
 	pthread_mutex_unlock(&philo->table->forks[left]);
 	pthread_mutex_unlock(&philo->table->forks[right]);
@@ -55,7 +55,7 @@ void	hold_left_fork(t_philo *philo, int left, int right)
 			printf("%ld %d died\n", crnt_time, philo->index);
 			break ;
 		}
-		usleep(100);
+		usleep(50);
 	}
 	pthread_mutex_lock(&philo->table->forks[left]);
 	if (!philo->table->stop_now)
@@ -96,6 +96,6 @@ void	sweet_dreams(t_philo *philo)
 			printf("%ld %d died\n", crnt_time, philo->index);
 			break ;
 		}
-		usleep(100);
+		usleep(50);
 	}
 }
