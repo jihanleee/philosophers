@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 23:38:10 by jihalee           #+#    #+#             */
-/*   Updated: 2023/09/13 00:56:25 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/25 15:52:31 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	init_vars(t_table *table, t_philo **philos, char argc, char **argv)
 	*philos = (t_philo *)ft_calloc(table->n_philos, sizeof (t_philo));
 	table->forks = (t_mutex *)ft_calloc(table->n_philos, sizeof (t_mutex));
 	pthread_mutex_init(&table->m_table, NULL);
+	pthread_mutex_init(&table->m_print, NULL);
 	init_philos(table, philos);
 }
 

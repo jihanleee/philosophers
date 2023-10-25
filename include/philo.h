@@ -6,7 +6,7 @@
 /*   By: jihalee <jihalee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 13:28:40 by jihalee           #+#    #+#             */
-/*   Updated: 2023/10/21 18:44:49 by jihalee          ###   ########.fr       */
+/*   Updated: 2023/10/25 16:08:22 by jihalee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_table
 	t_tv		init_tv;
 	bool		stop_now;
 	t_mutex		m_table;
+	t_mutex		m_print;
 	int			n_philos;
 	long		amnt_time_die;
 	long		amnt_time_eat;
@@ -53,7 +54,9 @@ typedef struct s_philo
 
 int		increament_n_ate_well(t_table *table);
 bool	write_stop_now(t_table *table, int value_to_assign);
-void	print_death(t_philo *philo, long crnt_time);
+bool	read_stop_now(t_table *table);
+void	print_death(t_philo *philo);
+void	print_msg(char *msg, t_philo *philo);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atol(const char *nptr);
 void	sweet_dreams(t_philo *philo);
